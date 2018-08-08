@@ -29,7 +29,7 @@ SOFTWARE.
 
 #define VERSION "2.1"
 
-#define HOSTNAME "OctMon-Kendler" 
+#define HOSTNAME "OctMon-" 
 #define CONFIG "/conf.txt"
 
 /* Useful Constants */
