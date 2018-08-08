@@ -23,12 +23,13 @@ SOFTWARE.
 
 #include "OctoPrintClient.h"
 
-OctoPrintClient::OctoPrintClient(String ApiKey, String server, int port, String user, String pass) {
-  updateOctoPrintClient(ApiKey, server, port, user, pass);
+OctoPrintClient::OctoPrintClient(String ApiKey, String server, String path, int port, String user, String pass) {
+  updateOctoPrintClient(ApiKey, server, path, port, user, pass);
 }
 
-void OctoPrintClient::updateOctoPrintClient(String ApiKey, String server, int port, String user, String pass) {
+void OctoPrintClient::updateOctoPrintClient(String ApiKey, String server, String path, int port, String user, String pass) {
   server.toCharArray(myServer, 100);
+  path.toCharArray(myPath, 100);
   myApiKey = ApiKey;
   myPort = port;
   encodedAuth = "";
@@ -113,7 +114,7 @@ void OctoPrintClient::getPrinterJobResults() {
   if (!validate()) {
     return;
   }
-  String apiGetData = "GET /api/job HTTP/1.1";
+  String apiGetData = "GET " + String(myPath) + "/api/job HTTP/1.1";
 
   WiFiClient printClient = getSubmitRequest(apiGetData);
 
@@ -152,7 +153,7 @@ void OctoPrintClient::getPrinterJobResults() {
   }
 
   //**** get the Printer Temps and Stat
-  apiGetData = "GET /api/printer?exclude=sd,history HTTP/1.1";
+  apiGetData = "GET " + String(myPath) + "/api/printer?exclude=sd,history HTTP/1.1";
   printClient = getSubmitRequest(apiGetData);
   if (printerData.error != "") {
     return;

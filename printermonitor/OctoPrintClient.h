@@ -30,6 +30,7 @@ class OctoPrintClient {
 
 private:
   char myServer[100];
+  char myPath[100];
   int myPort = 80;
   String myApiKey = "";
   String encodedAuth = "";
@@ -64,9 +65,9 @@ private:
 
   
 public:
-  OctoPrintClient(String ApiKey, String server, int port, String user, String pass);
+  OctoPrintClient(String ApiKey, String server, String path, int port, String user, String pass);
   void getPrinterJobResults();
-  void updateOctoPrintClient(String ApiKey, String server, int port, String user, String pass);
+  void updateOctoPrintClient(String ApiKey, String server, String path, int port, String user, String pass);
 
   String getAveragePrintTime();
   String getEstimatedPrintTime();

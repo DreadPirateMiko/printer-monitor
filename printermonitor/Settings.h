@@ -57,6 +57,7 @@ SOFTWARE.
 String OctoPrintApiKey = "";   // ApiKey from your User Account on OctoPrint
 String OctoPrintHostName = "octopi";// Default 'octopi' -- or hostname if different (optional if your IP changes)
 String OctoPrintServer = "";   // IP or Address of your OctoPrint Server (DO NOT include http://)
+String OctoPrintServerPath = "";   // IP or Address of your OctoPrint Server (DO NOT include http://)
 int OctoPrintPort = 80;        // the port you are running your OctoPrint server on (usually 80);
 String OctoAuthUser = "";      // only used if you have haproxy or basic athentintication turned on (not default)
 String OctoAuthPass = "";      // only used with haproxy or basic auth (only needed if you must authenticate)
@@ -73,7 +74,7 @@ const boolean WEBSERVER_ENABLED = true;  // Device will provide a web interface 
 char* www_username = "admin";  // User account for the Web Interface
 char* www_password = "password";  // Password for the Web Interface
 float UtcOffset = -7; // Hour offset from GMT for your timezone
-boolean IS_24HOUR = false;     // 23:00 millitary 24 hour clock
+boolean IS_24HOUR = true;     // 23:00 millitary 24 hour clock
 int minutesBetweenDataRefresh = 15;
 boolean DISPLAYCLOCK = true;   // true = Show Clock when not printing / false = turn off display when not printing
 
@@ -82,7 +83,7 @@ const int I2C_DISPLAY_ADDRESS = 0x3c; // I2C Address of your Display (usually 0x
 const int SDA_PIN = D2;
 const int SCL_PIN = D5;
 const boolean INVERT_DISPLAY = false; // true = pins at top | false = pins at the bottom
-//#define DISPLAY_SH1106       // Uncomment this line to use the SH1106 display -- SSD1306 is used by default and is most common
+#define DISPLAY_SH1106       // Uncomment this line to use the SH1106 display -- SSD1306 is used by default and is most common
 
 boolean ENABLE_OTA = true;     // this will allow you to load firmware to the device over WiFi (see OTA for ESP8266)
 String OTA_Password = "";      // Set an OTA password here -- leave blank if you don't want to be prompted for password

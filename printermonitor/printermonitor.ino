@@ -29,7 +29,7 @@ SOFTWARE.
 
 #define VERSION "2.1"
 
-#define HOSTNAME "OctMon-" 
+#define HOSTNAME "OctMon-Kendler" 
 #define CONFIG "/conf.txt"
 
 /* Useful Constants */
@@ -84,7 +84,7 @@ String lastReportStatus = "";
 boolean displayOn = true;
 
 // OctoPrint Client
-OctoPrintClient printerClient(OctoPrintApiKey, OctoPrintServer, OctoPrintPort, OctoAuthUser, OctoAuthPass);
+OctoPrintClient printerClient(OctoPrintApiKey, OctoPrintServer, OctoPrintServerPath, OctoPrintPort, OctoAuthUser, OctoAuthPass);
 int printerCount = 0;
 
 // Weather Client
@@ -107,6 +107,7 @@ String CHANGE_FORM =  "<form class='w3-container' action='/updateconfig' method=
                       "<p><label>OctoPrint API Key (get from your server)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='octoPrintApiKey' value='%OCTOKEY%' maxlength='60'></p>"
                       "<p><label>OctoPrint Host Name (usually octopi)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='octoPrintHostName' value='%OCTOHOST%' maxlength='60'></p>"
                       "<p><label>OctoPrint Address (do not include http://)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='octoPrintAddress' value='%OCTOADDRESS%' maxlength='60'></p>"
+                      "<p><label>OctoPrint Path</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='octoPrintAddressPath' value='%OCTOADDRESSPATH%' maxlength='60'></p>"
                       "<p><label>OctoPrint Port</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='octoPrintPort' value='%OCTOPORT%' maxlength='5'  onkeypress='return isNumberKey(event)'></p>"
                       "<p><label>OctoPrint User (only needed if you have haproxy or basic auth turned on)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='octoUser' value='%OCTOUSER%' maxlength='30'></p>"
                       "<p><label>OctoPrint Password </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='octoPass' value='%OCTOPASS%'></p><hr>"
@@ -406,6 +407,7 @@ void handleUpdateConfig() {
   OctoPrintApiKey = server.arg("octoPrintApiKey");
   OctoPrintHostName = server.arg("octoPrintHostName");
   OctoPrintServer = server.arg("octoPrintAddress");
+  OctoPrintServerPath = server.arg("octoPrintAddressPath");
   OctoPrintPort = server.arg("octoPrintPort").toInt();
   OctoAuthUser = server.arg("octoUser");
   OctoAuthPass = server.arg("octoPass");
@@ -499,6 +501,7 @@ void handleConfigure() {
   form.replace("%OCTOKEY%", OctoPrintApiKey);
   form.replace("%OCTOHOST%", OctoPrintHostName);
   form.replace("%OCTOADDRESS%", OctoPrintServer);
+  form.replace("%OCTOADDRESSPATH%", OctoPrintServerPath);
   form.replace("%OCTOPORT%", String(OctoPrintPort));
   form.replace("%OCTOUSER%", OctoAuthUser);
   form.replace("%OCTOPASS%", OctoAuthPass);
@@ -928,6 +931,7 @@ void writeSettings() {
     f.println("octoKey=" + OctoPrintApiKey);
     f.println("octoHost=" + OctoPrintHostName);
     f.println("octoServer=" + OctoPrintServer);
+    f.println("octoServerPath=" + OctoPrintServerPath);
     f.println("octoPort=" + String(OctoPrintPort));
     f.println("octoUser=" + OctoAuthUser);
     f.println("octoPass=" + OctoAuthPass);
@@ -976,6 +980,11 @@ void readSettings() {
       OctoPrintServer = line.substring(line.lastIndexOf("octoServer=") + 11);
       OctoPrintServer.trim();
       Serial.println("OctoPrintServer=" + OctoPrintServer);
+    }
+    if (line.indexOf("octoServerPath=") >= 0) {
+      OctoPrintServerPath = line.substring(line.lastIndexOf("octoServerPath=") + 15);
+      OctoPrintServerPath.trim();
+      Serial.println("OctoPrintServerPath=" + OctoPrintServerPath);
     }
     if (line.indexOf("octoPort=") >= 0) {
       OctoPrintPort = line.substring(line.lastIndexOf("octoPort=") + 9).toInt();
@@ -1039,7 +1048,7 @@ void readSettings() {
     }
   }
   fr.close();
-  printerClient.updateOctoPrintClient(OctoPrintApiKey, OctoPrintServer, OctoPrintPort, OctoAuthUser, OctoAuthPass);
+  printerClient.updateOctoPrintClient(OctoPrintApiKey, OctoPrintServer, OctoPrintServerPath, OctoPrintPort, OctoAuthUser, OctoAuthPass);
   weatherClient.updateWeatherApiKey(WeatherApiKey);
   weatherClient.setMetric(IS_METRIC);
   weatherClient.updateCityIdList(CityIDs, 1);
